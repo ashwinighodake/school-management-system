@@ -16,14 +16,14 @@ import java.sql.Driver;
 
 class Admin extends JFrame
 {
-    JFrame frame;
+    JFrame frame_admin;
     JPanel welcome_panel;
     JLabel welcome_label;
     
     JLabel username_label,password_label,wrong_uname_pass,wrong_pass,wrong_uname;
     JTextField username;
     JPasswordField password;
-    JButton submit;
+    JButton submit,previous_admin;
     String uname;
     String pass;
 
@@ -38,13 +38,11 @@ class Admin extends JFrame
     Connection conn=null;
     Statement stmt=null;
 
-
-
     Admin()
     {
     
-        frame=new JFrame("Admin Login");
-        frame.setSize(600,600);
+        frame_admin=new JFrame("Admin Login");
+        frame_admin.setSize(600,600);
         
         welcome_panel=new JPanel();
         welcome_panel.setBounds(0,0,600,200);
@@ -79,24 +77,31 @@ class Admin extends JFrame
         password.setBounds(200,400,200,30);
 
         submit=new JButton("Submit");
+        submit.setFont(new Font("Serif",Font.BOLD,15));
         submit.setBackground(Color.BLUE);
         submit.setForeground(Color.WHITE);
-        submit.setBounds(200,500,90,30);
+        submit.setBounds(200,500,150,30);
         
-        
+        previous_admin=new JButton("Previous");
+        previous_admin.setText("Previous");
+        previous_admin.setFont(new Font("Serif",Font.BOLD,15));
+        previous_admin.setBackground(Color.BLUE);
+        previous_admin.setForeground(Color.white);
+        previous_admin.setBounds(370,500,150,30);
 
         welcome_panel.add(welcome_label);
-        frame.add(welcome_panel);
-        frame.add(username_label);
-        frame.add(username);
-        frame.add(password_label);
-        frame.add(password);
-        frame.add(submit);
-       
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.WHITE) ;
+        frame_admin.add(welcome_panel);
+        frame_admin.add(username_label);
+        frame_admin.add(username);
+        frame_admin.add(password_label);
+        frame_admin.add(password);
+        frame_admin.add(submit);
+        frame_admin.add(previous_admin);
+
+        frame_admin.setLayout(null);
+        frame_admin.setVisible(true);
+        frame_admin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame_admin.getContentPane().setBackground(Color.WHITE) ;
         submit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -127,7 +132,8 @@ class Admin extends JFrame
         
                         if((admin_username.equals(uname))&&(admin_password.equals(pass)))
                         {
-                            frame.setVisible(false);
+                            frame_admin.setVisible(false);
+                            frame_admin.dispose();
                            Admin_operations adminobj=new Admin_operations(admin_name,admin_id);
                             
                         }
@@ -141,6 +147,15 @@ class Admin extends JFrame
                  }
             }       
         });
+        previous_admin.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame_admin.setVisible(false);
+                frame_admin.dispose();
+                School_Management_System sssoj=new School_Management_System();
+            }
+        });
     }
 }
 class Admin_operations
@@ -151,7 +166,7 @@ class Admin_operations
     JButton admin_button,teacher_button,student_button,teacher_information,student_information;
     JButton update_admin,add_teacher,update_teacher,delete_teacher,add_student,update_student,delete_student;
     JTextField t_name,s_name;
-    JButton submit;
+    JButton submit,previous,previous1,previous2;
 
     JLabel teacher_id_label,teacher_name_label,teacher_username_label,teacher_password_label,teacher_post_label;
     JLabel teacher_salary_label,teacher_mo_no_label;
@@ -269,6 +284,13 @@ class Admin_operations
         delete_student.setBounds(400,350,200,50);
         delete_student.setBackground(Color.BLUE);
         delete_student.setForeground(Color.WHITE);
+
+        previous=new JButton("Previous");
+        previous.setText("Previous");
+        previous.setFont(new Font("Serif",Font.BOLD,15));
+        previous.setBounds(450,520,130,50);
+        previous.setBackground(Color.BLUE);
+        previous.setForeground(Color.white);
         
         login_panel.add(welcome_label);
         frame.add(login_panel);
@@ -284,18 +306,30 @@ class Admin_operations
         frame.add(add_student);
         frame.add(update_student);
         frame.add(delete_student);
+        frame.add(previous);
 
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.WHITE) ;
         
+        update_admin.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                
+                Update_Admin(admin_name,admin_id);
+            }
+        });
         teacher_information.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
                 frame.setVisible(false);
-                Print_Teacher_information();         
+                frame.dispose();
+                Print_Teacher_information(admin_name,admin_id);         
             }       
         });
         
@@ -304,21 +338,23 @@ class Admin_operations
             public void actionPerformed(ActionEvent e)
             {
                 frame.setVisible(false);
-                Print_Student_Information();        
+                Print_Student_Information(admin_name,admin_id);        
             }       
         });
         add_teacher.addActionListener(new ActionListener()
         {
            public void actionPerformed(ActionEvent e)
            {
-               Add_Teacher(admin_id);
+               frame.setVisible(false);
+               Add_Teacher(admin_name,admin_id);
            }
         });
         add_student.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                Add_Student(admin_id);
+                frame.setVisible(false);
+                Add_Student(admin_name,admin_id);
             }
         });
         update_teacher.addActionListener(new ActionListener()
@@ -326,7 +362,7 @@ class Admin_operations
            public void actionPerformed(ActionEvent e)
            {
               frame.setVisible(false);
-              Update_Teacher();
+              Update_Teacher(admin_name,admin_id);
            }
         });
         update_student.addActionListener(new ActionListener()
@@ -334,7 +370,7 @@ class Admin_operations
            public void actionPerformed(ActionEvent e)
            {
               frame.setVisible(false);
-              Update_Student(); 
+              Update_Student(admin_name,admin_id); 
            }
         });
         delete_teacher.addActionListener(new ActionListener()
@@ -342,7 +378,7 @@ class Admin_operations
            public void actionPerformed(ActionEvent e)
            {
               frame.setVisible(false);
-              Delete_Teacher();
+              Delete_Teacher(admin_name,admin_id);
            }
         });
         delete_student.addActionListener(new ActionListener()
@@ -350,11 +386,692 @@ class Admin_operations
             public void actionPerformed(ActionEvent e)
             {
                 frame.setVisible(false);
-                Delete_Student();              
+                Delete_Student(admin_name,admin_id);              
+            }
+        });
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                Admin obj=new Admin();
             }
         });
     }
-    public void Print_Teacher_information()
+    public void Update_Admin(String admin_name,int admin_id)
+    {
+        JPanel update_admin_panel;
+        JLabel update_admin_label,input_label,admin_name_label,admin_username_label,admin_password_label;
+        JLabel admin_post_label,admin_mobile_label;
+      
+        
+        frame1=new JFrame("Update Admin");
+
+        update_admin_panel=new JPanel();
+        update_admin_panel.setLayout(null);
+        update_admin_panel.setBounds(0,0,700,200);
+        update_admin_panel.setBackground(Color.BLUE);
+      
+        update_admin_label=new JLabel();
+        update_admin_label.setText("Update Admin");
+        update_admin_label.setBounds(150,90,300,50);
+        update_admin_label.setFont(new Font("Serif",Font.BOLD,30));
+        update_admin_label.setForeground(Color.WHITE);
+
+        input_label=new JLabel();
+        input_label.setText("Click on what do you want to update:");
+        input_label.setBounds(10,210,700,30);
+        input_label.setFont(new Font("Serif",Font.BOLD,25));
+        input_label.setForeground(Color.BLUE);
+ 
+        admin_name_label=new JLabel();
+        admin_name_label.setText("* Update Admin name");
+        admin_name_label.setBounds(10,250,700,30);
+        admin_name_label.setFont(new Font("Serif",Font.BOLD,25));
+        admin_name_label.setForeground(Color.BLUE.darker());
+        admin_name_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        admin_username_label=new JLabel();
+        admin_username_label.setText("* Update Admin username");
+        admin_username_label.setBounds(10,300,700,30);
+        admin_username_label.setFont(new Font("Serif",Font.BOLD,25));
+        admin_username_label.setForeground(Color.BLUE.darker());
+        admin_username_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        admin_password_label=new JLabel();
+        admin_password_label.setText("* Update Admin password");
+        admin_password_label.setBounds(10,350,700,30);
+        admin_password_label.setFont(new Font("Serif",Font.BOLD,25));
+        admin_password_label.setForeground(Color.BLUE.darker());
+        admin_password_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        admin_post_label=new JLabel();
+        admin_post_label.setText("* Update Admin Post");
+        admin_post_label.setBounds(10,400,700,30);
+        admin_post_label.setFont(new Font("Serif",Font.BOLD,25));
+        admin_post_label.setForeground(Color.BLUE.darker());
+        admin_post_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        admin_mobile_label=new JLabel();
+        admin_mobile_label.setText("* Update admin mobile number");
+        admin_mobile_label.setBounds(10,450,700,30);
+        admin_mobile_label.setFont(new Font("Serif",Font.BOLD,25));
+        admin_mobile_label.setForeground(Color.BLUE.darker());
+        admin_mobile_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(450,500,150,30);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+       
+        update_admin_panel.add(update_admin_label);
+        frame1.add(update_admin_panel);
+        frame1.add(admin_name_label);
+        frame1.add(input_label);
+        frame1.add(admin_username_label);
+        frame1.add(admin_password_label);
+        frame1.add(admin_post_label);
+        frame1.add(admin_mobile_label);
+        frame1.add(previous2);
+
+        frame1.setSize(700,700);
+        frame1.setLayout(null);
+        frame1.setVisible(true);
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame1.getContentPane().setBackground(Color.WHITE) ;
+        
+        admin_name_label.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+              frame1.setVisible(false);
+
+              frame2=new JFrame("Admin Name Update");
+      
+              JPanel admin_name_panel=new JPanel();
+              admin_name_panel.setBounds(0,0,700,200);
+              admin_name_panel.setBackground(Color.blue);
+              admin_name_panel.setLayout(null);
+              
+              JLabel update_name_label=new JLabel("Update admin new name");
+              update_name_label.setForeground(Color.WHITE);
+              update_name_label.setFont(new Font("Serif",Font.BOLD,30));
+              update_name_label.setBounds(10,90,650,50);
+
+              JLabel admin_new_name_label=new JLabel("Enter admin new name:");
+              admin_new_name_label.setBounds(10,250,300,30);
+              admin_new_name_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_new_name_label.setForeground(Color.BLUE);
+
+              JTextField admin_name_TF=new JTextField();
+              admin_name_TF.setToolTipText("Enter admin new name");
+              admin_name_TF.setForeground(Color.blue);
+              admin_name_TF.setBounds(320,250,300,30);
+              admin_name_TF.setFont(new Font("Serif",Font.BOLD,20));
+
+              JLabel admin_id_label=new JLabel("Enter Admin id:");
+              admin_id_label.setForeground(Color.BLUE);
+              admin_id_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_label.setBounds(10,300,300,30);
+
+              JTextField admin_id_TF=new JTextField();
+              admin_id_TF.setToolTipText("Enter id of admin which you want to update name");
+              admin_id_TF.setForeground(Color.BLUE);
+              admin_id_TF.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_TF.setBounds(320,300,300,30);
+              
+              JButton Submit=new JButton("Submit");
+              Submit.setBackground(Color.BLUE);
+              Submit.setForeground(Color.white);
+              Submit.setBounds(100,400,150,30);
+              Submit.setFont(new Font("Serif",Font.BOLD,15));
+
+              JButton previous3=new JButton("Previous");
+              previous3.setBackground(Color.BLUE);
+              previous3.setForeground(Color.WHITE);
+              previous3.setBounds(300,400,150,30);
+              previous3.setFont(new Font("Serif",Font.BOLD,15));
+
+              admin_name_panel.add(update_name_label);
+              frame2.add(admin_name_panel);
+              frame2.add(admin_new_name_label);
+              frame2.add(admin_id_label);
+              frame2.add(admin_name_TF);
+              frame2.add(admin_id_TF);
+              frame2.add(Submit);
+              frame2.add(previous3);
+              frame2.setSize(700,600);
+              frame2.setLayout(null);
+              frame2.setVisible(true);
+              frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame2.getContentPane().setBackground(Color.WHITE) ;        
+      
+              previous3.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Admin(admin_name,admin_id);
+                  }
+              });
+              Submit.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                     String a_name=admin_name_TF.getText();
+                     int a_id=Integer.parseInt(admin_id_TF.getText());
+                     try
+                     {
+                        Class.forName(JDBC_DRIVER).newInstance();
+                        conn=DriverManager.getConnection(DB_URL,USER,PASS);
+                        stmt=conn.createStatement();
+                        String sql;
+                        ResultSet rs=null;
+
+                        sql=String.format("Update Admin set admin_name='%s' where admin_id=%d",a_name,a_id);
+                        ps=conn.prepareStatement(sql);
+                        int count=ps.executeUpdate(sql);
+                        if(count>0)
+                        {
+                           frame2.setVisible(false);
+                           JLabel success_label=new JLabel();
+                           success_label.setText("Updated Successfully");
+                           success_label.setFont(new Font("Serif",Font.BOLD,25));
+                           success_label.setForeground(Color.BLUE);
+                           success_label.setBounds(100,550,500,30);
+                         
+                           frame2.add(success_label);
+                           frame2.setVisible(true);
+                        }
+      
+                    }
+                     catch(Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                  }
+              });
+            }
+           
+        });
+        admin_username_label.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+              frame1.setVisible(false);
+
+              frame2=new JFrame("Admin Userame Update");
+      
+              JPanel admin_uname_panel=new JPanel();
+              admin_uname_panel.setBounds(0,0,700,200);
+              admin_uname_panel.setBackground(Color.blue);
+              admin_uname_panel.setLayout(null);
+              
+              JLabel update_uname_label=new JLabel("Update admin new username");
+              update_uname_label.setForeground(Color.WHITE);
+              update_uname_label.setFont(new Font("Serif",Font.BOLD,30));
+              update_uname_label.setBounds(10,90,650,50);
+
+              JLabel admin_new_uname_label=new JLabel("Enter admin new username:");
+              admin_new_uname_label.setBounds(10,250,350,30);
+              admin_new_uname_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_new_uname_label.setForeground(Color.BLUE);
+
+              JTextField admin_uname_TF=new JTextField();
+              admin_uname_TF.setToolTipText("Enter admin new username");
+              admin_uname_TF.setForeground(Color.blue);
+              admin_uname_TF.setBounds(370,250,300,30);
+              admin_uname_TF.setFont(new Font("Serif",Font.BOLD,20));
+
+              JLabel admin_id_label=new JLabel("Enter Admin id:");
+              admin_id_label.setForeground(Color.BLUE);
+              admin_id_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_label.setBounds(10,300,300,30);
+
+              JTextField admin_id_TF=new JTextField();
+              admin_id_TF.setToolTipText("Enter id of admin which you want to update username");
+              admin_id_TF.setForeground(Color.BLUE);
+              admin_id_TF.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_TF.setBounds(370,300,300,30);
+              
+              JButton Submit=new JButton("Submit");
+              Submit.setBackground(Color.BLUE);
+              Submit.setForeground(Color.white);
+              Submit.setBounds(100,400,150,30);
+              Submit.setFont(new Font("Serif",Font.BOLD,15));
+
+              JButton previous3=new JButton("Previous");
+              previous3.setBackground(Color.BLUE);
+              previous3.setForeground(Color.WHITE);
+              previous3.setBounds(300,400,150,30);
+              previous3.setFont(new Font("Serif",Font.BOLD,15));
+
+              admin_uname_panel.add(update_uname_label);
+              frame2.add(admin_uname_panel);
+              frame2.add(admin_new_uname_label);
+              frame2.add(admin_id_label);
+              frame2.add(admin_uname_TF);
+              frame2.add(admin_id_TF);
+              frame2.add(Submit);
+              frame2.add(previous3);
+              frame2.setSize(700,600);
+              frame2.setLayout(null);
+              frame2.setVisible(true);
+              frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame2.getContentPane().setBackground(Color.WHITE) ;        
+      
+              previous3.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Admin(admin_name,admin_id);
+                  }
+              });
+              Submit.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                     String a_name=admin_uname_TF.getText();
+                     int a_id=Integer.parseInt(admin_id_TF.getText());
+                     try
+                     {
+                        Class.forName(JDBC_DRIVER).newInstance();
+                        conn=DriverManager.getConnection(DB_URL,USER,PASS);
+                        stmt=conn.createStatement();
+                        String sql;
+                        ResultSet rs=null;
+
+                        sql=String.format("Update Admin set admin_username='%s' where admin_id=%d",a_name,a_id);
+                        ps=conn.prepareStatement(sql);
+                        int count=ps.executeUpdate(sql);
+                        if(count>0)
+                        {
+                           frame2.setVisible(false);
+                           JLabel success_label=new JLabel();
+                           success_label.setText("Updated Successfully");
+                           success_label.setFont(new Font("Serif",Font.BOLD,25));
+                           success_label.setForeground(Color.BLUE);
+                           success_label.setBounds(100,550,500,30);
+                         
+                           frame2.add(success_label);
+                           frame2.setVisible(true);
+                        }
+      
+                    }
+                     catch(Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                  }
+              });
+            }
+           
+        });
+        admin_password_label.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+              frame1.setVisible(false);
+
+              frame2=new JFrame("Admin Password Update");
+      
+              JPanel admin_password_panel=new JPanel();
+              admin_password_panel.setBounds(0,0,700,200);
+              admin_password_panel.setBackground(Color.blue);
+              admin_password_panel.setLayout(null);
+              
+              JLabel update_password_label=new JLabel("Update admin new password");
+              update_password_label.setForeground(Color.WHITE);
+              update_password_label.setFont(new Font("Serif",Font.BOLD,30));
+              update_password_label.setBounds(10,90,650,50);
+
+              JLabel admin_new_password_label=new JLabel("Enter admin new password:");
+              admin_new_password_label.setBounds(10,250,350,30);
+              admin_new_password_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_new_password_label.setForeground(Color.BLUE);
+
+              JTextField admin_password_TF=new JTextField();
+              admin_password_TF.setToolTipText("Enter admin new password");
+              admin_password_TF.setForeground(Color.blue);
+              admin_password_TF.setBounds(370,250,300,30);
+              admin_password_TF.setFont(new Font("Serif",Font.BOLD,20));
+
+              JLabel admin_id_label=new JLabel("Enter Admin id:");
+              admin_id_label.setForeground(Color.BLUE);
+              admin_id_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_label.setBounds(10,300,300,30);
+
+              JTextField admin_id_TF=new JTextField();
+              admin_id_TF.setToolTipText("Enter id of admin which you want to update password");
+              admin_id_TF.setForeground(Color.BLUE);
+              admin_id_TF.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_TF.setBounds(370,300,300,30);
+              
+              JButton Submit=new JButton("Submit");
+              Submit.setBackground(Color.BLUE);
+              Submit.setForeground(Color.white);
+              Submit.setBounds(100,400,150,30);
+              Submit.setFont(new Font("Serif",Font.BOLD,15));
+
+              JButton previous3=new JButton("Previous");
+              previous3.setBackground(Color.BLUE);
+              previous3.setForeground(Color.WHITE);
+              previous3.setBounds(300,400,150,30);
+              previous3.setFont(new Font("Serif",Font.BOLD,15));
+
+              admin_password_panel.add(update_password_label);
+              frame2.add(admin_password_panel);
+              frame2.add(admin_new_password_label);
+              frame2.add(admin_id_label);
+              frame2.add(admin_password_TF);
+              frame2.add(admin_id_TF);
+              frame2.add(Submit);
+              frame2.add(previous3);
+              frame2.setSize(700,600);
+              frame2.setLayout(null);
+              frame2.setVisible(true);
+              frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame2.getContentPane().setBackground(Color.WHITE) ;        
+      
+              previous3.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Admin(admin_name,admin_id);
+                  }
+              });
+              Submit.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                     String a_pass=admin_password_TF.getText();
+                     int a_id=Integer.parseInt(admin_id_TF.getText());
+                     try
+                     {
+                        Class.forName(JDBC_DRIVER).newInstance();
+                        conn=DriverManager.getConnection(DB_URL,USER,PASS);
+                        stmt=conn.createStatement();
+                        String sql;
+                        ResultSet rs=null;
+
+                        sql=String.format("Update Admin set admin_password='%s' where admin_id=%d",a_pass,a_id);
+                        ps=conn.prepareStatement(sql);
+                        int count=ps.executeUpdate(sql);
+                        if(count>0)
+                        {
+                           frame2.setVisible(false);
+                           JLabel success_label=new JLabel();
+                           success_label.setText("Updated Successfully");
+                           success_label.setFont(new Font("Serif",Font.BOLD,25));
+                           success_label.setForeground(Color.BLUE);
+                           success_label.setBounds(100,550,500,30);
+                         
+                           frame2.add(success_label);
+                           frame2.setVisible(true);
+                        }
+      
+                    }
+                     catch(Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                  }
+              });
+            }
+           
+        });
+        admin_post_label.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+              frame1.setVisible(false);
+
+              frame2=new JFrame("Admin Post Update");
+      
+              JPanel admin_post_panel=new JPanel();
+              admin_post_panel.setBounds(0,0,700,200);
+              admin_post_panel.setBackground(Color.blue);
+              admin_post_panel.setLayout(null);
+              
+              JLabel update_post_label=new JLabel("Update admin new post");
+              update_post_label.setForeground(Color.WHITE);
+              update_post_label.setFont(new Font("Serif",Font.BOLD,30));
+              update_post_label.setBounds(10,90,650,50);
+
+              JLabel admin_new_post_label=new JLabel("Enter admin new post:");
+              admin_new_post_label.setBounds(10,250,350,30);
+              admin_new_post_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_new_post_label.setForeground(Color.BLUE);
+
+              JTextField admin_post_TF=new JTextField();
+              admin_post_TF.setToolTipText("Enter admin new post");
+              admin_post_TF.setForeground(Color.blue);
+              admin_post_TF.setBounds(370,250,300,30);
+              admin_post_TF.setFont(new Font("Serif",Font.BOLD,20));
+
+              JLabel admin_id_label=new JLabel("Enter Admin id:");
+              admin_id_label.setForeground(Color.BLUE);
+              admin_id_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_label.setBounds(10,300,300,30);
+
+              JTextField admin_id_TF=new JTextField();
+              admin_id_TF.setToolTipText("Enter id of admin which you want to update post");
+              admin_id_TF.setForeground(Color.BLUE);
+              admin_id_TF.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_TF.setBounds(370,300,300,30);
+              
+              JButton Submit=new JButton("Submit");
+              Submit.setBackground(Color.BLUE);
+              Submit.setForeground(Color.white);
+              Submit.setBounds(100,400,150,30);
+              Submit.setFont(new Font("Serif",Font.BOLD,15));
+
+              JButton previous3=new JButton("Previous");
+              previous3.setBackground(Color.BLUE);
+              previous3.setForeground(Color.WHITE);
+              previous3.setBounds(300,400,150,30);
+              previous3.setFont(new Font("Serif",Font.BOLD,15));
+
+              admin_post_panel.add(update_post_label);
+              frame2.add(admin_post_panel);
+              frame2.add(admin_new_post_label);
+              frame2.add(admin_id_label);
+              frame2.add(admin_post_TF);
+              frame2.add(admin_id_TF);
+              frame2.add(Submit);
+              frame2.add(previous3);
+              frame2.setSize(700,600);
+              frame2.setLayout(null);
+              frame2.setVisible(true);
+              frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame2.getContentPane().setBackground(Color.WHITE) ;        
+      
+              previous3.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Admin(admin_name,admin_id);
+                  }
+              });
+              Submit.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                     String a_post=admin_post_TF.getText();
+                     int a_id=Integer.parseInt(admin_id_TF.getText());
+                     try
+                     {
+                        Class.forName(JDBC_DRIVER).newInstance();
+                        conn=DriverManager.getConnection(DB_URL,USER,PASS);
+                        stmt=conn.createStatement();
+                        String sql;
+                        ResultSet rs=null;
+
+                        sql=String.format("Update Admin set admin_post='%s' where admin_id=%d",a_post,a_id);
+                        ps=conn.prepareStatement(sql);
+                        int count=ps.executeUpdate(sql);
+                        if(count>0)
+                        {
+                           frame2.setVisible(false);
+                           JLabel success_label=new JLabel();
+                           success_label.setText("Updated Successfully");
+                           success_label.setFont(new Font("Serif",Font.BOLD,25));
+                           success_label.setForeground(Color.BLUE);
+                           success_label.setBounds(100,550,500,30);
+                         
+                           frame2.add(success_label);
+                           frame2.setVisible(true);
+                        }
+      
+                    }
+                     catch(Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                  }
+              });
+            }
+           
+        });
+        admin_mobile_label.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+              frame1.setVisible(false);
+
+              frame2=new JFrame("Admin Mobile number Update");
+      
+              JPanel admin_mobile_panel=new JPanel();
+              admin_mobile_panel.setBounds(0,0,700,200);
+              admin_mobile_panel.setBackground(Color.blue);
+              admin_mobile_panel.setLayout(null);
+              
+              JLabel update_mobile_label=new JLabel("Update admin new Mobile number");
+              update_mobile_label.setForeground(Color.WHITE);
+              update_mobile_label.setFont(new Font("Serif",Font.BOLD,30));
+              update_mobile_label.setBounds(10,90,650,50);
+
+              JLabel admin_new_mobile_label=new JLabel("Enter admin new mobile number:");
+              admin_new_mobile_label.setBounds(10,250,400,30);
+              admin_new_mobile_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_new_mobile_label.setForeground(Color.BLUE);
+
+              JTextField admin_mobile_TF=new JTextField();
+              admin_mobile_TF.setToolTipText("Enter admin new mobile number");
+              admin_mobile_TF.setForeground(Color.blue);
+              admin_mobile_TF.setBounds(410,250,250,30);
+              admin_mobile_TF.setFont(new Font("Serif",Font.BOLD,20));
+
+              JLabel admin_id_label=new JLabel("Enter Admin id:");
+              admin_id_label.setForeground(Color.BLUE);
+              admin_id_label.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_label.setBounds(10,300,300,30);
+
+              JTextField admin_id_TF=new JTextField();
+              admin_id_TF.setToolTipText("Enter id of admin which you want to update mobile number");
+              admin_id_TF.setForeground(Color.BLUE);
+              admin_id_TF.setFont(new Font("Serif",Font.BOLD,20));
+              admin_id_TF.setBounds(410,300,250,30);
+              
+              JButton Submit=new JButton("Submit");
+              Submit.setBackground(Color.BLUE);
+              Submit.setForeground(Color.white);
+              Submit.setBounds(100,400,150,30);
+              Submit.setFont(new Font("Serif",Font.BOLD,15));
+
+              JButton previous3=new JButton("Previous");
+              previous3.setBackground(Color.BLUE);
+              previous3.setForeground(Color.WHITE);
+              previous3.setBounds(300,400,150,30);
+              previous3.setFont(new Font("Serif",Font.BOLD,15));
+
+              admin_mobile_panel.add(update_mobile_label);
+              frame2.add(admin_mobile_panel);
+              frame2.add(admin_new_mobile_label);
+              frame2.add(admin_id_label);
+              frame2.add(admin_mobile_TF);
+              frame2.add(admin_id_TF);
+              frame2.add(Submit);
+              frame2.add(previous3);
+              frame2.setSize(700,600);
+              frame2.setLayout(null);
+              frame2.setVisible(true);
+              frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame2.getContentPane().setBackground(Color.WHITE) ;        
+      
+              previous3.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Admin(admin_name,admin_id);
+                  }
+              });
+              Submit.addActionListener(new ActionListener()
+              {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                     String a_mobile=admin_mobile_TF.getText();
+                     int a_id=Integer.parseInt(admin_id_TF.getText());
+                     try
+                     {
+                        Class.forName(JDBC_DRIVER).newInstance();
+                        conn=DriverManager.getConnection(DB_URL,USER,PASS);
+                        stmt=conn.createStatement();
+                        String sql;
+                        ResultSet rs=null;
+
+                        sql=String.format("Update Admin set admin_mobile_no='%s' where admin_id=%d",a_mobile,a_id);
+                        ps=conn.prepareStatement(sql);
+                        int count=ps.executeUpdate(sql);
+                        if(count>0)
+                        {
+                           frame2.setVisible(false);
+                           JLabel success_label=new JLabel();
+                           success_label.setText("Updated Successfully");
+                           success_label.setFont(new Font("Serif",Font.BOLD,25));
+                           success_label.setForeground(Color.BLUE);
+                           success_label.setBounds(100,550,500,30);
+                         
+                           frame2.add(success_label);
+                           frame2.setVisible(true);
+                        }
+      
+                    }
+                     catch(Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                  }
+              });
+            }
+           
+        });
+        
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame1.setVisible(false);
+                frame1.dispose();
+                Admin_operations aobj=new Admin_operations(admin_name,admin_id);               
+            }
+        });
+
+ 
+    }
+    public void Print_Teacher_information(String admin_name,int admin_id)
     {
         frame1=new JFrame("Teacher information");
 
@@ -380,13 +1097,20 @@ class Admin_operations
         submit.setBounds(50,260,150,40);
         submit.setForeground(Color.WHITE);
         submit.setBackground(Color.BLUE);
-
+        
+        previous1=new JButton("Previous");
+        previous1.setText("Previous");
+        previous1.setFont(new Font("Serif",Font.BOLD,20));
+        previous1.setBounds(300,260,150,40);
+        previous1.setForeground(Color.white);
+        previous1.setBackground(Color.blue);
         
         frame1.add(teacher_panel);
         teacher_panel.add(teacher_label);
         
         frame1.add(t_name);
         frame1.add(submit);
+        frame1.add(previous1);
         frame1.setSize(700,400);
         frame1.setLayout(null);
         frame1.setVisible(true);
@@ -431,9 +1155,19 @@ class Admin_operations
                 }
             }       
         });
+        previous1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame1.setVisible(false);
+                frame1.dispose();
+                
+                Admin_operations aobj=new Admin_operations(admin_name,admin_id);
+            } 
+        });
 
     }
-    public void Print_Student_Information()
+    public void Print_Student_Information(String admin_name,int admin_id)
     {
         frame2=new JFrame("Student information");
 
@@ -460,10 +1194,26 @@ class Admin_operations
         submit.setForeground(Color.WHITE);
         submit.setBackground(Color.BLUE);
 
+        submit=new JButton("Submit");
+        submit.setText("Submit");
+        submit.setFont(new Font("Serif",Font.BOLD,15));
+        submit.setBounds(50,260,150,40);
+        submit.setForeground(Color.WHITE);
+        submit.setBackground(Color.BLUE);
+
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(300,260,150,40);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+        
         student_panel.add(student_label);
         frame2.add(student_panel);
         frame2.add(s_name);
         frame2.add(submit);
+        frame2.add(previous2);
+
         frame2.setSize(700,400);
         frame2.setLayout(null);  
         frame2.setVisible(true);
@@ -508,14 +1258,23 @@ class Admin_operations
         
             }
         });
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame2.setVisible(false);
+                frame2.dispose();
+                Admin_operations aobj=new Admin_operations(admin_name,admin_id);               
+            }
+        });
 
     }
-    public void Add_Teacher(int admin_id)
+    public void Add_Teacher(String admin_name,int admin_id)
     {
         JLabel add_teacher_label;
         JTextField teacher_id_text,teacher_name_text,teacher_username_text;
         JTextField teacher_password_text,teacher_post_text,teacher_salary_text,teacher_mo_no_text;
-       JButton submit;
+        JButton submit;
        
        frame1=new JFrame("Add Teacher");
 
@@ -616,11 +1375,18 @@ class Admin_operations
 
        submit=new JButton();
        submit.setText("Submit");
-       submit.setFont(new Font("Serif",Font.BOLD,20));
+       submit.setFont(new Font("Serif",Font.BOLD,15));
        submit.setForeground(Color.WHITE);
        submit.setBackground(Color.BLUE);
-       submit.setBounds(320,600,150,50);
-
+       submit.setBounds(100,600,150,40);
+       
+       previous2=new JButton("Previous");
+       previous2.setText("Previous");
+       previous2.setFont(new Font("Serif",Font.BOLD,15));
+       previous2.setBounds(300,600,150,40);
+       previous2.setForeground(Color.white);
+       previous2.setBackground(Color.blue);
+       
        add_teacher_panel.add(add_teacher_label);
        frame1.add(add_teacher_panel);
        frame1.add(teacher_id_label);
@@ -638,6 +1404,8 @@ class Admin_operations
        frame1.add(teacher_mo_no_label);
        frame1.add(teacher_mo_no_text);
         frame1.add(submit);
+        frame1.add(previous2);
+
        frame1.setSize(800,900);
        frame1.setLayout(null);
        frame1.setVisible(true);
@@ -689,8 +1457,18 @@ class Admin_operations
 
            }//actionperformed close
        });//submit clos
+
+       previous2.addActionListener(new ActionListener()
+       {
+           public void actionPerformed(ActionEvent ae)
+           {
+            frame1.setVisible(false);
+            frame1.dispose();
+            Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+           }
+        });
     }//function close
-    public void Add_Student(int admin_id)
+    public void Add_Student(String admin_name,int admin_id)
     {
         JPanel add_student_panel;
         JLabel add_student_label;
@@ -788,11 +1566,18 @@ class Admin_operations
 
        submit=new JButton();
        submit.setText("Submit");
-       submit.setFont(new Font("Serif",Font.BOLD,20));
+       submit.setFont(new Font("Serif",Font.BOLD,15));
        submit.setForeground(Color.WHITE);
        submit.setBackground(Color.BLUE);
-       submit.setBounds(320,550,150,50);
-
+       submit.setBounds(100,550,150,30);
+       
+       previous2=new JButton("Previous");
+       previous2.setText("Previous");
+       previous2.setFont(new Font("Serif",Font.BOLD,15));
+       previous2.setBounds(300,550,150,30);
+       previous2.setForeground(Color.white);
+       previous2.setBackground(Color.blue);
+       
        add_student_panel.add(add_student_label);
        frame1.add(add_student_panel);
        frame1.add(student_id_label);
@@ -808,8 +1593,9 @@ class Admin_operations
        frame1.add(student_div_label);
        frame1.add(student_div_text);
        frame1.add(submit);
+       frame1.add(previous2);
         
-        frame1.setSize(800,800);
+        frame1.setSize(700,700);
         frame1.setLayout(null);
         frame1.setVisible(true);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -860,8 +1646,17 @@ class Admin_operations
 
            }
        });
+       previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+             frame1.setVisible(false);
+             frame1.dispose();
+             Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+            }
+         });
     }
-    public void Update_Teacher()
+    public void Update_Teacher(String admin_name,int admin_id)
     {
         JPanel update_teacher_panel;
         JLabel update_teacher_label,input_label;
@@ -878,57 +1673,65 @@ class Admin_operations
         update_teacher_label=new JLabel();
         update_teacher_label.setText("Update Teacher");
         update_teacher_label.setBounds(150,90,300,50);
-        update_teacher_label.setFont(new Font("Serif",Font.BOLD,30));
+        update_teacher_label.setFont(new Font("Serif",Font.BOLD,25));
         update_teacher_label.setForeground(Color.WHITE);
  
         input_label=new JLabel();
         input_label.setText("Click on what do you want to update:");
-        input_label.setBounds(10,250,800,50);
-        input_label.setFont(new Font("Serif",Font.BOLD,30));
+        input_label.setBounds(10,210,800,30);
+        input_label.setFont(new Font("Serif",Font.BOLD,25));
         input_label.setForeground(Color.BLUE);
  
 
         teacher_name_label=new JLabel();
         teacher_name_label.setText("* Update Teacher name");
-        teacher_name_label.setBounds(10,310,800,50);
-        teacher_name_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_name_label.setBounds(10,250,800,30);
+        teacher_name_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_name_label.setForeground(Color.BLUE.darker());
         teacher_name_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         teacher_username_label=new JLabel();
         teacher_username_label.setText("* Update Teacher username");
-        teacher_username_label.setBounds(10,370,800,50);
-        teacher_username_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_username_label.setBounds(10,300,800,30);
+        teacher_username_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_username_label.setForeground(Color.BLUE.darker());
         teacher_username_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         teacher_password_label=new JLabel();
         teacher_password_label.setText("* Update Teacher password");
-        teacher_password_label.setBounds(10,430,800,50);
-        teacher_password_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_password_label.setBounds(10,350,800,30);
+        teacher_password_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_password_label.setForeground(Color.BLUE.darker());
         teacher_password_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         teacher_post_label=new JLabel();
         teacher_post_label.setText("* Update Teacher post");
-        teacher_post_label.setBounds(10,490,800,50);
-        teacher_post_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_post_label.setBounds(10,400,800,30);
+        teacher_post_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_post_label.setForeground(Color.BLUE.darker());
         teacher_post_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         teacher_salary_label=new JLabel();
         teacher_salary_label.setText("* Update Teacher salary");
-        teacher_salary_label.setBounds(10,550,800,50);
-        teacher_salary_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_salary_label.setBounds(10,450,800,30);
+        teacher_salary_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_salary_label.setForeground(Color.BLUE.darker());
         teacher_salary_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         teacher_mo_no_label=new JLabel();
         teacher_mo_no_label.setText("* Update Teacher mobile number");
-        teacher_mo_no_label.setBounds(10,610,800,50);
-        teacher_mo_no_label.setFont(new Font("Serif",Font.BOLD,30));
+        teacher_mo_no_label.setBounds(10,500,800,30);
+        teacher_mo_no_label.setFont(new Font("Serif",Font.BOLD,25));
         teacher_mo_no_label.setForeground(Color.BLUE.darker());
         teacher_mo_no_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(500,550,150,40);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+       
 
         update_teacher_panel.add(update_teacher_label);
         frame1.add(update_teacher_panel);
@@ -939,7 +1742,8 @@ class Admin_operations
         frame1.add(teacher_post_label);
         frame1.add(teacher_salary_label);
         frame1.add(teacher_mo_no_label);
-        frame1.setSize(800,800);
+        frame1.add(previous2);
+        frame1.setSize(700,700);
         frame1.setLayout(null);
         frame1.setVisible(true);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -989,11 +1793,17 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+ 
                teacher_name_panel.add(update_teacher_name);
                frame2.add(teacher_name_panel);
                frame2.add(new_teacher_name_label);
@@ -1001,6 +1811,7 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -1047,6 +1858,16 @@ class Admin_operations
     
                    } 
                });
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+              });
+              
             } 
         });
         teacher_username_label.addMouseListener(new MouseAdapter()
@@ -1092,11 +1913,17 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
-
+ 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+ 
                teacher_username_panel.add(update_teacher_username);
                frame2.add(teacher_username_panel);
                frame2.add(new_teacher_username_label);
@@ -1104,13 +1931,23 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
-
+               frame2.add(previous3);
                frame2.setSize(700,600);
                frame2.setLayout(null);
                frame2.setVisible(true);
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
     
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+               });
+              
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1195,12 +2032,17 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
 
-
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+ 
                teacher_password_panel.add(update_teacher_password);
                frame2.add(teacher_password_panel);
                frame2.add(new_teacher_password_label);
@@ -1208,6 +2050,7 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -1215,6 +2058,16 @@ class Admin_operations
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
        
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+               });
+   
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1299,11 +2152,17 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+ 
                teacher_post_panel.add(update_teacher_post);
                frame2.add(teacher_post_panel);
                frame2.add(new_teacher_post_label);
@@ -1311,6 +2170,7 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
+               frame2.add(previous3);
               
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -1318,6 +2178,16 @@ class Admin_operations
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
 
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+               });
+   
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1402,11 +2272,16 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
-
+ 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
 
                teacher_salary_panel.add(update_teacher_salary);
                frame2.add(teacher_salary_panel);
@@ -1415,6 +2290,7 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
+               frame2.add(previous3);
               
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -1422,6 +2298,16 @@ class Admin_operations
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
        
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+               });
+   
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1506,10 +2392,16 @@ class Admin_operations
                teacher_id.setFont(new Font("Serif",Font.BOLD,20));
 
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,200,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
+
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
 
                teacher_name_panel.add(update_teacher_name);
                frame2.add(teacher_name_panel);
@@ -1518,13 +2410,24 @@ class Admin_operations
                frame2.add(new_teacher_id_label);
                frame2.add(teacher_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
                frame2.setVisible(true);
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
-       
+   
+               previous3.addActionListener(new ActionListener()
+               {
+                  public void actionPerformed(ActionEvent ae)
+                  {
+                      frame2.setVisible(false);
+                      frame2.dispose();
+                      Update_Teacher(admin_name,admin_id);
+                  }
+               });
+   
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1566,10 +2469,19 @@ class Admin_operations
                });
             } 
         });
-
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+             frame1.setVisible(false);
+             frame1.dispose();
+             Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+            }
+         });
+ 
 
     }
-    public void Update_Student()
+    public void Update_Student(String admin_name,int admin_id)
     {
         JPanel update_student_panel;
         JLabel update_student_label,input_label;
@@ -1591,45 +2503,52 @@ class Admin_operations
 
         input_label=new JLabel();
         input_label.setText("Click on what do you want to update:");
-        input_label.setBounds(10,250,800,50);
-        input_label.setFont(new Font("Serif",Font.BOLD,30));
+        input_label.setBounds(10,210,800,30);
+        input_label.setFont(new Font("Serif",Font.BOLD,25));
         input_label.setForeground(Color.BLUE);
  
         student_name_label=new JLabel();
         student_name_label.setText("* Update student name");
-        student_name_label.setBounds(10,310,800,50);
-        student_name_label.setFont(new Font("Serif",Font.BOLD,30));
+        student_name_label.setBounds(10,300,800,30);
+        student_name_label.setFont(new Font("Serif",Font.BOLD,25));
         student_name_label.setForeground(Color.BLUE.darker());
         student_name_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         student_username_label=new JLabel();
         student_username_label.setText("* Update Student username");
-        student_username_label.setBounds(10,370,800,50);
-        student_username_label.setFont(new Font("Serif",Font.BOLD,30));
+        student_username_label.setBounds(10,350,800,30);
+        student_username_label.setFont(new Font("Serif",Font.BOLD,25));
         student_username_label.setForeground(Color.BLUE.darker());
         student_username_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         student_password_label=new JLabel();
         student_password_label.setText("* Update Student password");
-        student_password_label.setBounds(10,430,800,50);
-        student_password_label.setFont(new Font("Serif",Font.BOLD,30));
+        student_password_label.setBounds(10,400,800,30);
+        student_password_label.setFont(new Font("Serif",Font.BOLD,25));
         student_password_label.setForeground(Color.BLUE.darker());
         student_password_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         student_class_label=new JLabel();
         student_class_label.setText("* Update Student Class");
-        student_class_label.setBounds(10,490,800,50);
-        student_class_label.setFont(new Font("Serif",Font.BOLD,30));
+        student_class_label.setBounds(10,450,800,30);
+        student_class_label.setFont(new Font("Serif",Font.BOLD,25));
         student_class_label.setForeground(Color.BLUE.darker());
         student_class_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         student_div_label=new JLabel();
         student_div_label.setText("* Update Student Div");
-        student_div_label.setBounds(10,550,800,50);
-        student_div_label.setFont(new Font("Serif",Font.BOLD,30));
+        student_div_label.setBounds(10,500,800,30);
+        student_div_label.setFont(new Font("Serif",Font.BOLD,25));
         student_div_label.setForeground(Color.BLUE.darker());
         student_div_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(450,550,150,30);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+       
         update_student_panel.add(update_student_label);
         frame1.add(update_student_panel);
         frame1.add(input_label);
@@ -1638,8 +2557,9 @@ class Admin_operations
         frame1.add(student_password_label);
         frame1.add(student_class_label);
         frame1.add(student_div_label);
+        frame1.add(previous2);
 
-        frame1.setSize(800,800);
+        frame1.setSize(700,700);
         frame1.setLayout(null);
         frame1.setVisible(true);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1688,11 +2608,17 @@ class Admin_operations
                 student_id.setFont(new Font("Serif",Font.BOLD,20));
  
                 JButton submit=new JButton("Submit");
-                submit.setBounds(250,400,200,50);
-                submit.setFont(new Font("Serif",Font.BOLD,25));
+                submit.setBounds(100,400,150,30);
+                submit.setFont(new Font("Serif",Font.BOLD,15));
                 submit.setBackground(Color.BLUE);
                 submit.setForeground(Color.WHITE);
 
+                JButton previous3=new JButton("Previous");
+                previous3.setBackground(Color.BLUE);
+                previous3.setForeground(Color.WHITE);
+                previous3.setBounds(300,400,150,30);
+                previous3.setFont(new Font("Serif",Font.BOLD,15));
+  
 
                 student_name_panel.add(update_student_name);
                 frame2.add(student_name_panel);
@@ -1701,13 +2627,24 @@ class Admin_operations
                 frame2.add(new_student_id_label);
                 frame2.add(student_id);
                 frame2.add(submit);
+                frame2.add(previous3);
 
                 frame2.setSize(700,600);
                 frame2.setLayout(null);
                 frame2.setVisible(true);
                 frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame2.getContentPane().setBackground(Color.WHITE) ; 
-                
+           
+                previous3.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent ae)
+                    {
+                        frame2.setVisible(false);
+                        frame2.dispose();
+                        Update_Student(admin_name,admin_id);
+                    }
+                });
+       
                 submit.addActionListener(new ActionListener()
                 {
                     public void actionPerformed(ActionEvent e)
@@ -1793,11 +2730,17 @@ class Admin_operations
                 student_id.setFont(new Font("Serif",Font.BOLD,20));
  
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,150,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
-
+ 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+ 
                student_name_panel.add(update_student_username);
                frame2.add(student_name_panel);
                frame2.add(new_student_username_label);
@@ -1805,6 +2748,7 @@ class Admin_operations
                frame2.add(new_student_id_label);
                frame2.add(student_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -1812,6 +2756,16 @@ class Admin_operations
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
        
+               previous3.addActionListener(new ActionListener()
+               {
+                   public void actionPerformed(ActionEvent ae)
+                   {
+                       frame2.setVisible(false);
+                       frame2.dispose();
+                       Update_Student(admin_name,admin_id);
+                   }
+               });
+      
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1895,11 +2849,16 @@ class Admin_operations
                 student_id.setFont(new Font("Serif",Font.BOLD,20));
  
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,150,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
-
+ 
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
 
                student_name_panel.add(update_student_password);
                frame2.add(student_name_panel);
@@ -1908,13 +2867,24 @@ class Admin_operations
                frame2.add(new_student_id_label);
                frame2.add(student_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
                frame2.setVisible(true);
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
-       
+
+               previous3.addActionListener(new ActionListener()
+               {
+                   public void actionPerformed(ActionEvent ae)
+                   {
+                       frame2.setVisible(false);
+                       frame2.dispose();
+                       Update_Student(admin_name,admin_id);
+                   }
+               });
+    
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -1999,10 +2969,17 @@ class Admin_operations
                 student_id.setFont(new Font("Serif",Font.BOLD,20));
  
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,150,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
+
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
+
 
                student_name_panel.add(update_student_class);
                frame2.add(student_name_panel);
@@ -2011,6 +2988,7 @@ class Admin_operations
                frame2.add(new_student_id_label);
                frame2.add(student_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
@@ -2018,6 +2996,16 @@ class Admin_operations
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
        
+               previous3.addActionListener(new ActionListener()
+               {
+                   public void actionPerformed(ActionEvent ae)
+                   {
+                       frame2.setVisible(false);
+                       frame2.dispose();
+                       Update_Student(admin_name,admin_id);
+                   }
+               });
+    
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -2101,10 +3089,16 @@ class Admin_operations
                 student_id.setFont(new Font("Serif",Font.BOLD,20));
  
                JButton submit=new JButton("Submit");
-               submit.setBounds(250,400,200,50);
-               submit.setFont(new Font("Serif",Font.BOLD,25));
+               submit.setBounds(100,400,150,30);
+               submit.setFont(new Font("Serif",Font.BOLD,15));
                submit.setBackground(Color.BLUE);
                submit.setForeground(Color.WHITE);
+
+               JButton previous3=new JButton("Previous");
+               previous3.setBackground(Color.BLUE);
+               previous3.setForeground(Color.WHITE);
+               previous3.setBounds(350,400,150,30);
+               previous3.setFont(new Font("Serif",Font.BOLD,15));
 
                student_name_panel.add(update_student_div);
                frame2.add(student_name_panel);
@@ -2113,13 +3107,23 @@ class Admin_operations
                frame2.add(new_student_id_label);
                frame2.add(student_id);
                frame2.add(submit);
+               frame2.add(previous3);
 
                frame2.setSize(700,600);
                frame2.setLayout(null);
                frame2.setVisible(true);
                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame2.getContentPane().setBackground(Color.WHITE) ;        
-       
+    
+               previous3.addActionListener(new ActionListener()
+               {
+                   public void actionPerformed(ActionEvent ae)
+                   {
+                       frame2.setVisible(false);
+                       frame2.dispose();
+                       Update_Student(admin_name,admin_id);
+                   }
+               });   
                submit.addActionListener(new ActionListener()
                {
                    public void actionPerformed(ActionEvent e)
@@ -2161,8 +3165,18 @@ class Admin_operations
                });
             } 
         });
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+             frame1.setVisible(false);
+             frame1.dispose();
+             Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+            }
+         });
+ 
     }
-    public void Delete_Teacher()
+    public void Delete_Teacher(String admin_name,int admin_id)
     {
         frame1=new JFrame("Delete Teacher");
         JPanel delete_teacher_panel;
@@ -2202,16 +3216,26 @@ class Admin_operations
 
         submit=new JButton();
         submit.setText("Submit");
-        submit.setFont(new Font("Serif",Font.BOLD,20));
+        submit.setFont(new Font("Serif",Font.BOLD,15));
         submit.setForeground(Color.WHITE);
         submit.setBackground(Color.BLUE);
-        submit.setBounds(300,400,150,30);
+        submit.setBounds(100,400,150,30);
  
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(300,400,150,30);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+       
         delete_teacher_panel.add(delete_teacher_label);
         frame1.add(delete_teacher_panel);
         frame1.add(teacher_id_label);
         frame1.add(teacher_id_text);
         frame1.add(submit);
+
+        frame1.add(previous2);
+
         frame1.setSize(600,600);
         frame1.setLayout(null);
         frame1.setVisible(true);
@@ -2256,8 +3280,17 @@ class Admin_operations
 
             }
         });
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+             frame1.setVisible(false);
+             frame1.dispose();
+             Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+            }
+         });
     }
-    public void Delete_Student()
+    public void Delete_Student(String admin_name,int admin_id)
     {
         frame1=new JFrame("Delete Student");
         JPanel delete_student_panel;
@@ -2291,16 +3324,25 @@ class Admin_operations
 
         submit=new JButton();
         submit.setText("Submit");
-        submit.setFont(new Font("Serif",Font.BOLD,20));
+        submit.setFont(new Font("Serif",Font.BOLD,15));
         submit.setForeground(Color.WHITE);
         submit.setBackground(Color.BLUE);
-        submit.setBounds(300,400,150,30);
- 
+        submit.setBounds(100,400,150,30);
+       
+        previous2=new JButton("Previous");
+        previous2.setText("Previous");
+        previous2.setFont(new Font("Serif",Font.BOLD,15));
+        previous2.setBounds(300,400,150,30);
+        previous2.setForeground(Color.white);
+        previous2.setBackground(Color.blue);
+       
         delete_student_panel.add(delete_student_label);
         frame1.add(delete_student_panel);
         frame1.add(student_id_label);
         frame1.add(student_id_text);
         frame1.add(submit);
+        frame1.add(previous2);
+
         frame1.setSize(600,600);
         frame1.setLayout(null);
         frame1.setVisible(true);
@@ -2345,6 +3387,15 @@ class Admin_operations
 
             }
         });
+        previous2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+             frame1.setVisible(false);
+             frame1.dispose();
+             Admin_operations aobj=new Admin_operations(admin_name,admin_id); 
+            }
+         });
 
     }
 }
@@ -2364,14 +3415,11 @@ class Teacher extends JFrame
         
     String DB_URL="jdbc:mysql://localhost/Computer_Department";
 
- 
     String USER ="root";
     String PASS ="";
 
     Connection conn=null;
     Statement stmt=null;
-
-
 
     Teacher()
     {
@@ -2413,9 +3461,12 @@ class Teacher extends JFrame
         submit=new JButton("Submit");
         submit.setBackground(Color.BLUE);
         submit.setForeground(Color.WHITE);
-        submit.setBounds(200,500,90,30);
+        submit.setBounds(100,500,150,30);
         
-        
+        JButton previous=new JButton("Previous");
+        previous.setBackground(Color.BLUE);
+        previous.setForeground(Color.white);
+        previous.setBounds(350,500,150,30);
 
         welcome_panel.add(welcome_label);
         frame.add(welcome_panel);
@@ -2424,12 +3475,22 @@ class Teacher extends JFrame
         frame.add(password_label);
         frame.add(password);
         frame.add(submit);
-       
+        frame.add(previous);
+
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.WHITE);
-        
+       
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                School_Management_System obj=new School_Management_System();         
+            }
+        });
         submit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -2474,8 +3535,6 @@ class Teacher extends JFrame
     
             }       
         });
- 
-
     }
 }
 class Teacher_operations extends JFrame
@@ -2843,7 +3902,6 @@ class Teacher_operations extends JFrame
                frame1.add(subject_id_text);
                frame1.add(submit);
 
-
                frame1.setSize(800,600);
                frame1.setLayout(null);
                frame1.setVisible(true);
@@ -2889,9 +3947,6 @@ class Teacher_operations extends JFrame
         
                    }       
                });
-        
-
-
             }
         });
         
@@ -2900,6 +3955,7 @@ class Teacher_operations extends JFrame
 class Teacher_information extends JFrame
 {
    JFrame frame;
+   JButton previous;
    JLabel id,name,post,salary,username;
    JLabel password,mobile_no;
    JLabel t_id,t_name,t_post,t_salary,t_username;
@@ -2987,6 +4043,13 @@ class Teacher_information extends JFrame
        t_mobile_no.setBounds(220,410,600,30);
        t_mobile_no.setForeground(Color.WHITE);
 
+       previous=new JButton("Previous");
+       previous.setText("Previous");
+       previous.setFont(new Font("Serif",Font.BOLD,15));
+       previous.setBackground(Color.white);
+       previous.setForeground(Color.BLUE);
+       previous.setBounds(450,500,130,40);
+
        frame.add(id);
        frame.add(t_id);
        frame.add(name);
@@ -3001,6 +4064,7 @@ class Teacher_information extends JFrame
        frame.add(t_password);
        frame.add(mobile_no);
        frame.add(t_mobile_no);
+       frame.add(previous);
 
         frame.setSize(600,600);
         frame.setLayout(null);
@@ -3008,6 +4072,15 @@ class Teacher_information extends JFrame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLUE) ;
 
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                Teacher_operations tobj=new Teacher_operations(teacher_name,teacher_id);
+            }
+        });
    }   
 }
 class Teacher_Attendance extends JFrame
@@ -3110,7 +4183,6 @@ class Student extends JFrame
     String JDBC_DRIVER ="com.mysql.cj.jdbc.Driver";
         
     String DB_URL="jdbc:mysql://localhost/Computer_Department";
-
  
     String USER ="root";
     String PASS ="";
@@ -3158,9 +4230,12 @@ class Student extends JFrame
         submit=new JButton("Submit");
         submit.setBackground(Color.BLUE);
         submit.setForeground(Color.WHITE);
-        submit.setBounds(200,500,90,30);
+        submit.setBounds(100,500,150,30);
         
-        
+        JButton previous=new JButton("Previous");
+        previous.setBackground(Color.BLUE);
+        previous.setForeground(Color.WHITE);
+        previous.setBounds(300,500,150,30);
 
         welcome_panel.add(welcome_label);
         frame.add(welcome_panel);
@@ -3169,12 +4244,22 @@ class Student extends JFrame
         frame.add(password_label);
         frame.add(password);
         frame.add(submit);
-      
+        frame.add(previous);
+
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.WHITE);
 
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                School_Management_System obj=new School_Management_System();
+            }
+        });
         submit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -3221,7 +4306,6 @@ class Student extends JFrame
  
             }       
         });
- 
     }
 }
 class Student_operations extends JFrame
@@ -3282,7 +4366,6 @@ class Student_operations extends JFrame
         information.setForeground(Color.WHITE);
         information.setBackground(Color.BLUE);
 
-
         attendance=new JButton("Your Attendance");
         attendance.setText("Your Attendance");
         attendance.setFont(new Font("Serif",Font.BOLD,15));
@@ -3297,30 +4380,43 @@ class Student_operations extends JFrame
         result.setForeground(Color.WHITE);
         result.setBackground(Color.BLUE);
 
+        JButton previous=new JButton("Previous");
+        previous.setBackground(Color.BLUE);
+        previous.setForeground(Color.WHITE);
+        previous.setBounds(450,550,100,30);
+
         login_panel.add(welcome_label);
         frame.add(login_panel);
         frame.add(select);
         frame.add(information);
         frame.add(attendance);
         frame.add(result);
+        frame.add(previous);
 
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.WHITE) ;
  
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                Student obj=new Student();
+            }
+        });
         information.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                
                 try
                 {
                   Class.forName(JDBC_DRIVER).newInstance();
         
-                  
                     conn=DriverManager.getConnection(DB_URL,USER,PASS);
-                 stmt=conn.createStatement();
+                    stmt=conn.createStatement();
                     String sql;
         
                     sql="select Rollno,student_name,student_class,student_div,student_username,student_password from Student";
@@ -3340,12 +4436,8 @@ class Student_operations extends JFrame
                              
                             Student_information s_obj=new Student_information(student_rno,student_name,student_class,student_div,student_username,student_password); 
                       
-                        }
-                        
-                        
+                        }   
                     }
-        
-                   
                  }
                  catch(Exception E)
                  {
@@ -3454,10 +4546,7 @@ class Student_operations extends JFrame
  
             }       
         });
-        
-
     }
- 
 }
 class Student_information extends JFrame
 {
@@ -3535,8 +4624,11 @@ class Student_information extends JFrame
         s_password.setBounds(220,350,600,30);
         s_password.setForeground(Color.WHITE);
  
- 
-        
+        JButton previous=new JButton("Previous");
+        previous.setBackground(Color.white);
+        previous.setForeground(Color.BLUE); 
+        previous.setBounds(450,500,120,30);
+
         frame.add(rno);
         frame.add(s_rno);
         frame.add(name);
@@ -3549,12 +4641,22 @@ class Student_information extends JFrame
         frame.add(s_username);
         frame.add(password);
         frame.add(s_password);
-        
+        frame.add(previous);
         frame.setSize(600,600);
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLUE) ;
+
+        previous.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ae)
+            {
+                frame.setVisible(false);
+                frame.dispose();
+                Student_operations sobj=new Student_operations(student_name,student_rno);
+            }
+        });
  
     }
 
@@ -3701,12 +4803,11 @@ class Student_Result extends JFrame
         mark_label.setForeground(Color.WHITE);
         mark_label.setFont(new Font("Serif",Font.BOLD,20));
         mark_label.setBounds(250,50,190,30);
-      
+ 
         int y=80,j=0;
 
         for(j=0;j<size;j++)
         {
-            
             sub_name[j]=new JLabel();
             sub_name[j].setText(""+subject_name[j]);
             sub_name[j].setForeground(Color.WHITE);
@@ -3722,8 +4823,6 @@ class Student_Result extends JFrame
             y=y+20;
             
         }
-
-
         frame1.add(Rollno);
         frame1.add(student_roll_number);
         frame1.add(subject_name_label);
@@ -3750,6 +4849,7 @@ public class School_Management_System extends JFrame
     JButton admin_login,teacher_login,student_login;
     School_Management_System()
     {
+
         frame=new JFrame("Main Frame");
  
         welcome_panel=new JPanel();
