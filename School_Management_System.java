@@ -1,3 +1,7 @@
+/*
+ javac filename.java
+ java -cp .:mysql-connector-java-8.0.2.jar School_Management_System
+*/
 import java.lang.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
