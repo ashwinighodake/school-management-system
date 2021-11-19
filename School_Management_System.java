@@ -1,6 +1,11 @@
 /*
  javac filename.java
  java -cp .:mysql-connector-java-8.0.2.jar School_Management_System
+ 
+ mysql
+ sudo systemctl stop mysql
+ sudo /opt/lampp/xampp start
+ /opt/lampp/bin/mysql -u root
 */
 import java.lang.*;
 import java.awt.event.WindowEvent;
